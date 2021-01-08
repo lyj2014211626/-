@@ -1,0 +1,376 @@
+<style>
+img {
+    max-width: 100%;
+    max-height: 100%;
+    /*align-items: center;*/
+}
+img.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-title">
+                    <h4>Percentage Complete</h4>
+                </div>
+                <div class="card-content">
+                    <div id="complete_rate" style="height: 370px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: transparent;" ></div>
+                </div>
+            </div>
+      </div>
+      <div class="col-lg-6">
+          <div class="card">
+              <div class="card-title">
+                  <h4>ROC</h4>
+              </div>
+              <div class="card-content">
+                  <div id="allocation_rate" style="height: 370px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: transparent;" >
+                    <img id="roc_img" class="displayed" src="images/svm.jpg"  alt="ROC" />
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                  <ul id="line_nav" class="nav nav-tabs card-header-tabs" style="text-align:center">
+                    <li class="nav-item">
+                      <a class="nav-link disabled" ><font size="4" color="blue" id="char2_title">svm</font></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#" onclick="change_line(this,'auc')">AUC</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#" onclick="change_line(this,'thresholds')">Thresholds</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#" onclick="change_line(this,'acc')">Accuracy</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link"  href="#" onclick="change_line(this,'pre')">Precision</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link"  href="#" onclick="change_line(this,'rec')">Recall</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#" onclick="change_line(this,'f1_score')">F1_score</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="card-content">
+                    <div id="char2" style="height: 370px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: transparent;" ></div>
+                </div>
+            </div>
+          </div>
+      <div class="col-lg-6">
+          <div class="card">
+
+            <div class="card-header">
+                <ul id="bar_nav" class="nav nav-tabs card-header-tabs" style="text-align:center">
+                  <li class="nav-item">
+                    <a class="nav-link disabled" ><font size="4" color="blue" id="char3_title">svm</font></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="change_bar(this,'auc')">AUC</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="change_bar(this,'thresholds')">Thresholds</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="change_bar(this,'acc')">Accuracy</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  href="#" onclick="change_bar(this,'pre')">Precision</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  href="#" onclick="change_bar(this,'rec')">Recall</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="change_bar(this,'f1_score')">F1_score</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-content">
+                  <div id="char3" style="height: 370px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: transparent;" ></div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+<script src="js/lib/jquery/jquery.min.js"></script>
+
+
+<!-- Echart -->
+<script src="js/lib/echart/echarts.js"></script>
+<script src="js/lib/echart/echarts-init.js"></script>
+
+<script type="text/javascript">
+
+      // 基于准备好的dom，初始化echarts实例
+      var myChart0 = echarts.init(document.getElementById('complete_rate'));
+
+      // 指定图表的配置项和数据
+      var option0 = {
+      tooltip : {
+          formatter: "{a} <br/>{b} : {c}%"
+      },
+      toolbox: {
+          feature: {
+              restore: {},
+              saveAsImage: {}
+          }
+      },
+      series: [
+          {
+              name: '业务指标',
+              type: 'gauge',
+              detail: {formatter:'{value}%'},
+              data: [{value: 0, name: ''}]
+          }
+        ]
+      };
+      var update_complete_rate = (rate) => {
+            option0.series[0].data[0].value = rate
+            myChart0.setOption(option0, true);
+      }
+
+
+
+
+      var myChart2 = echarts.init(document.getElementById('char2'));
+      option2 = {
+        backgroundColor: "#fff",
+        color: ["#37A2DA"],
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['第1次', '第3次', '第5次', '第7次', '第9次'],
+        },
+        yAxis: {
+          x: 'center',
+          type: 'value',
+        },
+        series: [{
+          name: '表现',
+          type: 'line',
+          data: [0, 0, 0, 0, 0]
+        }]
+      };
+      myChart2.setOption(option2);
+      var update_chart2 = (server_data,length,index) => {
+        option2.series[0].data = []
+        option2.xAxis.data = []
+        for(let i = 0;i < length;i++){
+          let j = i + 1
+          option2.xAxis.data.push("第"+j+"次")
+          option2.series[0].data.push(server_data[i][index])
+          myChart2.setOption(option2, true);
+        }
+      }
+
+      var myChart3 = echarts.init(document.getElementById('char3'));
+      option3 = {
+        backgroundColor: "#ffffff",
+        color: ['#37A2DA'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['第1次', '第3次', '第5次', '第7次', '第9次'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: 'Data',
+            type: 'bar',
+            barWidth: '70%',
+            data: [0, 0, 0, 0, 0]
+        }]
+    }
+    myChart3.setOption(option3);
+    var update_chart3 = (server_data,length,index) => {
+      option3.series[0].data = []
+      option3.xAxis[0].data = []
+      for(let i = 0;i < length;i++){
+        let j = i + 1
+        option3.xAxis[0].data.push("第"+j+"次")
+        option3.series[0].data.push(server_data[i][index])
+        myChart3.setOption(option3, true);
+      }
+    }
+
+
+
+
+
+      $(window).on('resize',function(){
+        myChart0.resize();
+        //myChart1.resize();
+        myChart2.resize();
+        myChart3.resize();
+      });
+
+
+
+      var $allocrate = $("#allocrate")
+      var $cantalloc = $("#cantalloc")
+      var get_all_rate = () => {
+          //console.log('in function get_all_rate');
+          $.ajax({
+                url:"/get_complete_rate_api",
+                type:"POST",
+                success:(data) =>{
+                    //data = JSON.parse(data)
+                    //console.log(data)
+                    console.log(data)
+                    update_complete_rate(Math.round(data.complete_rate * 100))
+                },
+                error:(xhr,status,error)=>{
+                  console.log(error)
+                  update_complete_rate(0)
+                  //$allocrate.html('-%')
+                  //$cantalloc.html(data.cant_be_allocated)
+                }
+              })
+      }
+      var get_now_status = () => {
+          //console.log('in function get_all_rate');
+          $.ajax({
+                url:"/control_api",
+                type:"POST",
+                success:(data) =>{
+                    //data = JSON.parse(data)
+                    //console.log(data)
+                    console.log(data);
+                    if(data.status == 'run'){
+                      $('#run_pause').html('<i class="ti-control-pause"></i>Stop')
+                    }
+                    if(data.status == 'stop'){
+                      $('#run_pause').html('<i class="ti-control-play"></i>Run')
+                    }
+                    update_complete_rate(Math.round(data.complete_rate * 100))
+                },
+                error:(xhr,status,error)=>{
+                  console.log(error)
+                  update_complete_rate(0)
+                  //$allocrate.html('-%')
+                  //$cantalloc.html(data.cant_be_allocated)
+                }
+              })
+      }
+      get_now_status()
+      setInterval(get_all_rate,15000)
+      get_all_rate()
+
+
+
+
+
+
+      var get_all_data = (filename) => {
+          $.ajax({
+                url:"/get_run_output_api",
+                type:"POST",
+                data:{filename:filename},
+                success:(data) =>{
+                    window.server_data = data
+                    last_index = data.length-1
+                    update_chart2(data,last_index,"auc")
+                    update_chart3(data,last_index,"auc")
+                    console.log(data)
+                },
+                error:(xhr,status,error)=>{
+                  console.log("what error??");
+                  console.log(error)
+                }
+              })
+      }
+      var algs = ['svm.json','DT.json','RF.json','xgboost.json','stacking.json']
+      var i = 0
+      get_all_data('svm.json')
+      $char2_title = $('#char2_title')
+      $char3_title = $('#char3_title')
+      $roc_img = $('#roc_img')
+      function get_all_data_interval(){
+        let alg = algs[i++%algs.length].replace('.json','')
+        get_all_data(alg+'.json')
+        $char2_title.html(alg)
+        $char3_title.html(alg)
+        console.log('????????????');
+        $roc_img.attr('src','images/'+alg+'.jpg')
+      }
+      //get_all_data_interval()
+      setInterval(get_all_data_interval,10000)
+
+        //setInterval(get_all_data,50000)
+
+        function change_line(obj,index){
+          $('#line_nav').find('a').attr('class','nav-link')
+          update_chart2(window.server_data,window.server_data.length-1,index)
+          $(obj).attr('class','nav-link active')
+        }
+
+        function change_bar(obj,index){
+          $('#bar_nav').find('a').attr('class','nav-link')
+          update_chart3(window.server_data,window.server_data.length-1,index)
+          $(obj).attr('class','nav-link active')
+        }
+
+        function run_pause(obj){
+            console.log(obj.html())
+            if(obj.html()==='<i class="ti-control-play"></i>Run'){
+              obj.html('<i class="ti-control-pause"></i>Stop')
+              console.log('-------------------');
+
+              update_complete_rate(0)
+              $.ajax({
+                    url:"/control_api/update",
+                    type:"POST",
+                    data:{status:"run"},
+                    success:(data) =>{
+                      console.log('-------------------');
+                      console.log(data)
+                      //if(data != 'failed')
+                      //update_complete_rate(0)
+                    }
+                  })
+              return
+            }
+
+            if(obj.html()==='<i class="ti-control-pause"></i>Stop'){
+                obj.html('<i class="ti-control-play"></i>Run')
+                $.ajax({
+                      url:"/control_api/update",
+                      type:"POST",
+                      data:{status:"stop"},
+                      success:(data) =>{
+                      }
+                    })
+            }
+        }
+
+</script>

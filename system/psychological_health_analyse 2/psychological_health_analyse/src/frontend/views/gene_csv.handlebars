@@ -1,0 +1,125 @@
+<style>
+    .ui_button {
+        padding:10px;
+        background: #01AAED;
+        color: #fff;
+    }
+    .ui_button:hover {
+       opacity: 0.9;
+    }
+</style> 
+<head>
+  <script>
+    function uploadFile() {
+            var myform = new FormData();
+
+            myform.append('sick',$("#sick").val());
+            myform.append('path',$("#path").val());
+          
+            $.ajax({
+                url: "http://127.0.0.1:5000/gene_csv",
+
+                type: "POST",
+
+                data: myform,
+
+                async: false,
+
+                contentType: false,
+
+                processData: false,
+
+                success: function (result) {
+                    //alert('/' + myform.get("model").toLowerCase());
+                    alert("上传成功");
+                    window.location='/asd'+'?sick='+myform.get("sick")+'&path='+myform.get("path");
+                },
+
+                error: function (result) {
+                    alert("运行失败");
+
+                }
+
+            });
+
+        }
+  </script>
+</head>
+
+<div class="row">
+<div class="col-lg-3">
+</div>
+<div class="col-lg-6">
+  <div class="col-lg-12">
+    {{#if success_msg}}
+      <div class="alert alert-success ">{{success_msg}}</div>
+    {{/if}}
+
+    {{#if error_msg}}
+      <div class="alert alert-danger ">{{error_msg}}</div>
+    {{/if}}
+
+    {{#if error}}
+      <div class="alert alert-danger ">{{error}}</div>
+    {{/if}}
+  </div>
+    <div class="card card-outline-primary">
+        <div class="card-header">
+            <h4 class="m-b-0 text-white">遗传因素疾病风险量化</h4>
+        </div>
+        <div class="card-body">
+            <form action="http://127.0.0.1:5000/gene_csv" method="POST" enctype="multipart/form-data">
+                <div class="form-body">
+                  <h3 class="box-title m-t-40"></h3>
+                  <hr>
+          
+                        <div class="form-group has-danger">
+                            <label class="control-label">选择疾病</label>
+                            <select id="sick" class="form-control custom-select" name="sick" data-placeholder="Choose a Category" tabindex="1">
+                                <option value="ASD">ASD</option>
+                                <option value="AS.1">AS.1</option>
+                                <option value="AS">AS</option>
+                                <option value="AS-COA">AS-COA</option>
+                                <option value="ASD+">ASD+</option>
+                                <option value="AVSD">AVSD</option>
+                                <option value="CoA">CoA</option>
+                                <option value="COA_IVS">COA_IVS</option>
+                                <option value="DORT">DORT</option>
+                                <option value="DORV">DORV</option>
+                                <option value="ebstain">ebstain</option>
+                                <option value="Hex">Hex</option>
+                                <option value="IAA,B">IAA,B</option>
+                                <option value="HLHS">HLHS</option>
+                                <option value="半月瓣">半月瓣</option>
+                                <option value="房室瓣">房室瓣</option>
+                                <option value="导管弓">导管弓</option>
+                                <option value="心外">心外</option>
+                                <option value="TOF">TOF</option>
+                                <option value="TV">TV</option>
+                                <option value="共同房室瓣">共同房室瓣</option>
+                                <option value="冠脉">冠脉</option>
+                            </select>
+                        </div>
+
+                                            <div class="form-group has-danger">
+                            <label class="control-label">选择路径</label>
+                            <select id="path" class="form-control custom-select" name="path" data-placeholder="Choose a Category" tabindex="1">
+                                <option value="SPMG">SPMG</option>
+                                <option value="SPMPG">SPMPG</option>
+                                <option value="SPGPG">SPGPG</option>
+                                <option value="SPMPGPG">SPMPGPG</option>
+                                <option value="SPGC_combine">SPGC_combine</option>
+                                
+                            </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-success" onclick="uploadFile()" id="save_info"> <i class="fa fa-check"></i> Upload</button>
+                    <button type="button" class="btn btn-inverse" onclick="history.back(-1)">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
